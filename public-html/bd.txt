@@ -1,0 +1,7 @@
+EVENTOS
+- Id
+- title
+- Descricao
+- Color
+- InicioHorario
+- TerminoHorario

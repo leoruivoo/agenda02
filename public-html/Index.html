@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<!-- Fullcalendar css -->
+<link href='css/core/main.min.css' rel='stylesheet' />
+<link href='css/daygrid/main.min.css' rel='stylesheet' />
+<link href='css/timegrid/main.min.css' rel='stylesheet' />
+<!-- Bootstrap 4 css -->
+<link href="css/bootstrap/bootstrap.min.css" rel='stylesheet'/>
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+<!-- Tempus Dominius css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+<!-- Pickr color css nano -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/> <!-- 'nano' theme -->
+<!-- Estilo css -->
+<link rel="stylesheet" href="css/estilo/modal.css"/>
+
+<!-- Fullcalendar js -->
+<script src='js/core/main.min.js'></script>
+<script src='js/interaction/main.min.js'></script>
+<script src='js/daygrid/main.min.js'></script>
+<script src='js/timegrid/main.min.js'></script>
+<script src='js/core/locales/pt-br.js'></script>
+<!-- Moment -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Modern or es5 bundle, pickr color -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
+<!-- Inputmask jquery -->
+<script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/4.x/dist/jquery.inputmask.bundle.js"></script>
+
+<!-- Personalizado JS -->
+<script type='text/javascript' src="js/projeto/personalizado.js"></script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      locale: 'pt-br',
+      plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], 
+      customButtons: {
+        add_event: {
+            icon: 'plus-square',
+            click: function(info) {
+              // $('#ModalAdd #datahoraComeca').val(info.start.toLocaleString());
+              // $('#ModalAdd #datahoraTermina').val(info.end.toLocaleString());
+              $("#ModalAdd").modal('show');
+            }
+        },
+        materias: {
+            text: 'Matérias',
+            click: function() {
+              if($(".visMaterias").css("display") == "none"){
+                $(".visMaterias").slideToggle();
+                if($(".visFalta").css("display") == "block"){
+                  $(".visFalta").slideToggle();
+                }
+                if($(".visNota").css("display") == "block"){
+                  $(".visNota").slideToggle();
+                }
+              }
+              limparForm("ModalMaterias");
+               $("#ModalMaterias").modal('show');
+            }
+        },
+        add_notas: {
+            text: '+ Notas',
+            click: function() {
+                limparForm("ModalAddNotas");
+               $("#ModalAddNotas").modal('show');
+            }
+        },
+        add_faltas: {
+            text: '+ Faltas',
+            click: function() {
+              limparForm("ModalAddFaltas");
+              $("#ModalAddFaltas").modal('show');
+            }
+        }
+      },     
+      header: {
+        left: 'prev,next today',
+        right: 'materias add_notas add_faltas add_event',
+        center: 'title'
+      },
+      //defaultDate: '2019-08-12',
+      navLinks: false, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: false, // allow "more" link when too many events
+      weekends: true,
+      events: [
+        {
+          title: 'All Day Event',
+          start: '2019-11-01',
+          color: 'orange'
+        },
+        {
+          title: 'Long Event',
+          start: '2019-11-07',
+          end: '2019-11-10',
+          color: 'red'
+        },
+        {
+          groupId: 999,
+          title: 'Repeating Event',
+          start: '2019-11-10T16:00:00'
+        },
+        {
+          groupId: 999,
+          title: 'Repeating Event',
+          start: '2019-11-16T16:00:00'
+        },
+        {
+          title: 'BCH237',
+          start: '2019-11-13T10:30:00',
+          end: '2019-11-13T11:30:00',
+          extendedProps: {
+            department: 'BioChemistry'
+          },
+          description: 'Lecture'
+        },
+        {
+          title: 'Conference',
+          start: '2019-11-11',
+          end: '2019-11-13',
+          color: 'violet'
+        },
+        {
+          title: 'Meeting',
+          start: '2019-11-12T10:30:00',
+          end: '2019-11-12T12:30:00'
+        },
+        {
+          title: 'Lunch',
+          start: '2019-11-12T12:00:00',
+          backgroundColor: 'yellow'
+        },
+        {
+          title: 'Meeting',
+          start: '2019-11-12T14:30:00'
+        },
+        {
+          title: 'Happy Hour',
+          start: '2019-11-12T17:30:00'
+        },
+        {
+          title: 'Dinner',
+          start: '2019-11-12T20:00:00'
+        },
+        {
+          title: 'Birthday Party',
+          start: '2019-11-13T07:00:00'
+        }
+      ], 
+      eventRender: function (info) {
+        console.log(info.event.extendedProps);
+        // {description: "Lecture", department: "BioChemistry"}
+      },
+      selectable: true,
+      select: function (info){
+        if($(".visEvent").css("display") == "none"){
+          $(".visEvent").slideToggle();
+          if($(".formEdit").css("display") == "block"){
+            $(".formEdit").slideToggle();
+          }
+          if($(".ModalVisEventAdd").css("display") == "block"){
+            $(".ModalVisEventAdd").slideToggle();
+          }
+        }
+        limparForm("ModalVisualizar");
+        $('#ModalVisualizar').modal('show');
+      }
+
+    });
+
+    calendar.render();
+    calendar.setOption('height', 'auto');
+    calendar.setOption('contentHeight', 'auto');
+
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media only screen and (max-width: 576px){
+    .fc-event{
+      font-size: 0;
+      line-height: 1;
+      padding: 0.1rem;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+  <div id='calendar'></div>
+
+  
+  <div class="container">
+    <!-- The Modal -->
+    <div class="modal fade" id="ModalMaterias">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          
+          <div class="visMaterias">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Matérias</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body container-fluid ">
+              <table class="table table-borderless">
+                <tbody>
+                  <tr>
+                    <td>APL - Algoritmo</td>
+                    <td><button type="button" class="btn btn-info btn-materias-info" name="btnMatInfo" id="btnMatInfo" value="matInfo">Info</button></td>
+                    <td><button type="button" class="btn btn-warning btn-materias-faltas text-white" name="btnMatFaltas" id="btnMatFaltas" value="matFaltas">Faltas</button></td>
+                    <td><button type="button" class="btn btn-success btn-materias-notas" name="matNotas" id="matNotas" value="matNotas">Notas</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="matFalta">
+            <div>
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Faltas de [Nome da materia]</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body container-fluid pb-5">
+                <span id="msg-addfalta"></span>
+                <form method="POST" class="" id="addMateriaFalta">
+                  <div class='col-md-10 col-12'>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Data da falta:</span>
+                        </div>
+                        <input type="date" id="faltaData" class="form-control" name="faltaData" required/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Horário da aula">Horário</span>
+                    </div>
+                    <select class="custom-select col-10 col-sm-7" id="faltaHorario" title="Horário de aula">
+                      <option value="1" selected>1 horário</option>
+                      <option>2 horário</option>
+                    </select>
+                  </div>
+                  <div class="float-right">
+                    <button type="button" class="btn btn-success" name="CadFalta" id="CadFalta" value="CadFalta" onclick="limparForm('addMateriaFalta')">Cadastrar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <div class="modal-body">
+              <div>
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th>Data da falta</th>
+                      <th>Horário</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>24/05/20 </td>
+                      <td>1 horário</td>
+                      <td><button type="button" class="btn btn-danger" id="dataFaltaExluir">Excluir</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-materias-faltas" onclick="limparForm('addMateriaFalta')">Voltar</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="matNota">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Notas de [Nome da materia]</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+              <!-- Modal body -->
+              <div class="modal-body container-fluid pb-5">
+                <span id="msg-addfalta"></span>
+                <form method="POST" class="" id="addMateriaNota">
+                  <div class='col-md-10 col-12'>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Data da Nota:</span>
+                        </div>
+                        <input type="date" id="notaData" class="form-control" name="notaData"/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Tipo de nota:</span>
+                    </div>
+                    <select class="custom-select col-10 col-sm-7" id="tipo" title="Tipo">
+                      <option selected>Prova 1</option>
+                      <option>Prova 2</option>
+                      <option>Prova 3</option>
+                      <option>Trabalho 1</option>
+                      <option>Trabalho 2</option>
+                      <option>Trabalho 3</option>
+                      <option>Sub 1</option>
+                    </select>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-6" id="divVisNota">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Nota da matéria">Nota</span>
+                    </div>
+                    <input type="number" class="form-control" id="Nota">
+                  </div>
+                  <div class="float-right">
+                    <button type="button" class="btn btn-success" name="CadNota" id="CadNota" value="CadNota" onclick="limparForm('addMateriaNota')">Cadastrar</button>
+                  </div>
+                </form>
+              </div>
+
+              <hr>
+              <div class="modal-body">
+                <div>
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th>Tipo</th>
+                        <th>Nota</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Prova 1 </td>
+                        <td>6.0 </td>
+                        <td><button type="button" class="btn btn-danger" id="dataFaltaExluir">Excluir</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-materias-notas" onclick="limparForm('addMateriaNota')">Voltar</button>
+              </div>
+            </div>
+
+          </div>
+        
+          <div class="matInfo">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Info de [Nome da materia]</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body container-fluid">
+              <div class="row">
+                <div class="col-6">
+                  <span>19:00 - 21:30</span>
+                </div>
+                <div class="col-6">
+                  <span>Aulas: 4/20</span>
+                </div>
+                <div class="col-6">
+                  <span>51A</span>
+                </div>
+                <div class="col-6">
+                  <span>Faltas: 2</span>
+                </div>
+              </div>
+            </div>
+
+            <hr>
+            <div class="modal-body">
+              <div>
+                <button type="button" class="btn btn-secondary btn-materias-info" onclick="limparForm('addMateriaNota')">Voltar</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="container">
+    <!-- The Modal -->
+    <div class="modal fade" id="ModalAddFaltas">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Faltas de [Nome da materia]</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body container-fluid ">
+            <span id="msg-addfalta"></span>
+            <form method="POST" class="" id="addFalta">
+              <div class='col-md-10 col-12'>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Data da falta:</span>
+                    </div>
+                    <input type="date" id="faltaData" class="form-control" name="faltaData" required/>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group mb-3 col-12 col-sm-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" title="Matéria">Matéria</span>
+                </div>
+                <select class="custom-select col-10 col-sm-7" id="addFaltaMateria" title="Matéria">
+                  <option value="1" selected>CGP - Also</option>
+                  <option>CGP - Edgard</option>
+                  <option>LPO - Erick</option>
+                  <option>MPAT - Elisa</option>
+                </select>
+              </div>
+              <div class="input-group mb-3 col-12 col-sm-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" title="Horário da aula">Horário</span>
+                </div>
+                <select class="custom-select col-10 col-sm-7" id="faltaHorario" title="Horário de aula">
+                  <option value="1" selected>1 horário</option>
+                  <option>2 horário</option>
+                </select>
+              </div>
+              <div class="float-right">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="limparForm('addFalta')">Cancelar</button>
+                <button type="button" class="btn btn-success" name="CadFalta" id="CadFalta" value="CadFalta" onclick="limparForm('addFalta')">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- The Modal -->
+    <div class="modal fade" id="ModalAddNotas">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Adicionar Nota</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body container-fluid ">
+            <span id="msg-addfalta"></span>
+            <form method="POST" class="" id="addNota">
+              <div class='col-md-10 col-12'>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Data da Nota:</span>
+                    </div>
+                    <input type="date" id="notaData" class="form-control" name="notaData"/>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group mb-3 col-12 col-sm-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" title="Matéria">Matéria</span>
+                </div>
+                <select class="custom-select col-10 col-sm-7" id="addNotaMateria" title="Matéria">
+                  <option value="1" selected>CGP - Also</option>
+                  <option>CGP - Edgard</option>
+                  <option>LPO - Erick</option>
+                  <option>MPAT - Elisa</option>
+                </select>
+              </div>
+              <div class="input-group mb-3 col-12 col-sm-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Tipo de nota:</span>
+                </div>
+                <select class="custom-select col-10 col-sm-7" id="tipo" title="Tipo">
+                  <option value="1" selected>Prova 1</option>
+                  <option>Prova 2</option>
+                  <option>Prova 3</option>
+                  <option>Trabalho 1</option>
+                  <option>Trabalho 2</option>
+                  <option>Trabalho 3</option>
+                  <option>Sub 1</option>
+                </select>
+              </div>
+              <div class="input-group mb-3 col-7 col-sm-5 ">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" title="Nota da matéria">Nota</span>
+                </div>
+                <input type="number" class="form-control" id="Nota">
+              </div>
+              <div class="float-right">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="limparForm('addNota')">Cancelar</button>
+                <button type="button" class="btn btn-success" name="CadNota" id="CadNota" value="CadNota" onclick="limparForm('addNota')">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <!-- The Modal -->
+    <div class="modal fade" id="ModalAdd">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar novo evento</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body container-fluid ">
+                  <span id="msg-cad"></span>
+                    <form method="POST" class="" id="addEvent">
+                      <div class="input-group mb-3 col-12 col-sm-10">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Título*" id="titulo" required>
+                      </div>
+                      <div class="input-group mb-3 col-12 col-sm-10">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                        </div>
+                        <textarea type="text" class="form-control" placeholder="Descrição" row="1" id="descricao"></textarea>
+                      </div>
+                      <div class="row col-12">
+                        <div class="input-group mb-3 col-6 col-sm-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" title="Cor do evento"><i class="fas fa-palette"></i></span>
+                          </div>
+                          <div class="color-pickers" title="Cor do evento" id="bgcolor"></div>
+                              
+                        </div>
+                        <div class="input-group mb-3 col-6 col-sm-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" title="Cor do texto"><i class="fas fa-paint-brush"></i></span>
+                          </div>
+                          <div class="color-pickers" title="Cor do texto" id="textcolor"></div> 
+                              
+                        </div>
+                      </div>
+                      <div class="input-group mb-3 col-12 col-sm-10">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" title="Tipo de evento"><i class="far fa-calendar-check"></i></span>
+                        </div>
+                        <select class="custom-select col-10 col-sm-7" id="tipo" title="Tipo de evento">
+                          <option value="1" selected>Meu calendário</option>
+                          <option>CGP - Edgard</option>
+                          <option>LPO - Erick</option>
+                          <option>MPAT - Elisa</option>
+                        </select>
+                      </div>
+                      <div class='col-md-8'>
+                        <div class="form-group">
+                          <div class="input-group date" data-target-input="nearest">
+                            <input type="text" id="datahoraComeca" class="form-control" data-target="#datahoraComeca" placeholder="Data e horário de Início*" required onkeypress="DataHora(event, this)" />
+                            <div class="input-group-append" >
+                              <div class="input-group-text"><i class="fas fa-calendar-plus"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='col-md-8'>
+                        <div class="form-group mb-0">
+                          <div class="input-group date" data-target-input="nearest">
+                            <input type="text" class="form-control" id="datahoraTermina" data-target="#datahoraTermina" placeholder="Data e horário de Término*" onkeypress="DataHora(event, this)" required/>
+                            <div class="input-group-append" >
+                              <div class="input-group-text"><i class="fas fa-calendar-minus"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <span class="text-secondary"><small>OBS: formato DD/MM/AAAA HH:MM:SS</small></span>
+                      </div>
+                      <div class="float-right">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="limparForm('addEvent');">Cancelar</button>
+                        <button type="button" class="btn btn-success" name="CadEvent" id="CadEvent" value="CadEvent" onclick="limparForm('addEvent')">Cadastrar</button>
+                      </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="modal fade" id="ModalVisualizar">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="visEvent">
+          <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Data que foi clicado (2 de novembro de 2019)</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body container ">
+              <div class="col-12">
+                <i class="far fa-plus-square fa-2x btnToggleAddEvento float-right"></i>
+              </div>
+              <div class="card col-12 card-margin-top p-0 p-sm-3">
+                <div class="card-body">
+                  <h4 class="card-title">Matéria - Professor</h4>
+                  <div class="row">
+                    <div class="col-6">
+                      <span>Horário</span>
+                    </div>
+                    <div class="col-6">
+                      <span>Aulas</span>
+                    </div>
+                    <div class="col-6">
+                      <span>Sala</span>
+                    </div>
+                    <div class="col-6">
+                      <span>Faltas</span>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-warning btn-visualizar-faltas text-white" name="btnVisFaltas" id="btnVisFaltas" value="visFaltas">Faltas</button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-success btn-visualizar-notas" name="visNotas" id="visNotas" value="visNotas">Notas</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+              <div class="card col-12 card-margin-top bg-light p-0 p-sm-3">
+                <div class="card-body">
+                  <h4 class="card-title">LGP - Edgard</h4>
+                  <div class="row">
+                    <div class="col-6">
+                      <span>19:00 - 21:30</span>
+                    </div>
+                    <div class="col-6">
+                      <span>Aulas: 4/20</span>
+                    </div>
+                    <div class="col-6">
+                      <span>51A</span>
+                    </div>
+                    <div class="col-6">
+                      <span>Faltas: 2</span>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-warning btn-visualizar-faltas text-white" name="btnVisFaltas" id="btnVisFaltas" value="visFaltas">Faltas</button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-success btn-visualizar-notas" name="visNotas" id="visNotas" value="visNotas">Notas</button>
+                    </div>
+                  </div>
+          
+                  <div class="card col-12 card-margin-top bg-info text-white p-0 p-sm-3">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8 col-sm-10">
+                          <h5 class="card-title">Prova P1</h5>
+                        </div>
+                        <div class="col-4 col-sm-2">
+                          <div class="float-right">
+                            <i class="far fa-edit fa-1x btnEditarEvento"></i>
+                            <i class="far fa-trash-alt btnRemoveEvento"></i>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <p class="card-text"> Materias bla bla bal, com consulta</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+              <div class="card col-12 card-margin-top badge-dark text-white p-0 p-sm-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-9 col-sm-10">
+                      <h5 class="card-title">Evento de sei la oq</h5>
+                    </div>
+                    <div class="col-3 col-sm-2">
+                      <div class="float-right">
+                        <i class="far fa-edit fa-1x btnEditarEvento"></i>
+                        <i class="far fa-trash-alt btnRemoveEvento"></i>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <sapn class="card-text">21:00 - 23:00</span>
+                      <p class="card-text"> Materias bla bla bal, com consulta</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-content formEdit">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Data que foi clicado (2 de novembro de 2019)</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <span id="msg-edit"></span>
+            <div class="modal-body container-fluid pb-5">
+              <form method="POST" class="" id="editVisEvent">
+                <input type="hidden" name="id" id="id">
+                <div class="input-group mb-3 col-12 col-sm-10">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Título*" id="titulo" required>
+                </div>
+                <div class="input-group mb-3 col-12 col-sm-10">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                  </div>
+                  <textarea type="text" class="form-control" placeholder="Descrição" row="1" id="descricao"></textarea>
+                </div>
+                <div class="row col-12">
+                  <div class="input-group mb-3 col-6 col-sm-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Cor do evento"><i class="fas fa-palette"></i></span>
+                    </div>
+                    <div class="color-pickers" title="Cor do evento" id="bgcolor"></div>
+                        
+                  </div>
+                  <div class="input-group mb-3 col-6 col-sm-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Cor do texto"><i class="fas fa-paint-brush"></i></span>
+                    </div>
+                    <div class="color-pickers" title="Cor do texto" id="textcolor"></div> 
+                  </div>
+                </div>
+                <div class="input-group mb-3 col-12 col-sm-10">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" title="Tipo de evento"><i class="far fa-calendar-check"></i></span>
+                  </div>
+                  <select class="custom-select col-10 col-sm-7" id="tipo" title="Tipo de evento">
+                    <option value="1" selected>Meu calendário</option v>
+                    <option>CGP - Edgard</option>
+                    <option>LPO - Erick</option>
+                    <option>MPAT - Elisa</option>
+                  </select>
+                </div>
+                <div class='col-md-8'>
+                  <div class="form-group">
+                    <div class="input-group date" data-target-input="nearest">
+                      <input type="text" id="datahoraComeca" class="form-control" data-target="#datahoraComeca" placeholder="Data e horário de Início*" required onkeypress="DataHora(event, this)" />
+                      <div class="input-group-append" >
+                        <div class="input-group-text"><i class="fas fa-calendar-plus"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class='col-md-8'>
+                  <div class="form-group mb-0">
+                    <div class="input-group date" data-target-input="nearest">
+                      <input type="text" class="form-control" id="datahoraTermina" data-target="#datahoraTermina" placeholder="Data e horário de Término*" onkeypress="DataHora(event, this)" required/>
+                      <div class="input-group-append" >
+                        <div class="input-group-text"><i class="fas fa-calendar-minus"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <span class="text-secondary"><small>OBS: formato DD/MM/AAAA HH:MM:SS</small></span>
+                </div>
+                <div class="float-right">
+                  <button type="button" class="btn btn-secondary btnEditarEvento" onclick="limparForm('editVisEvent')">Cancelar</button>
+                  <button type="button" class="btn btn-success" name="CadEvent" id="CadEvent" value="CadEvent" onclick="limparForm('editVisEvent')">Salvar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+            
+          <div class="modal-content ModalVisEventAdd">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Adicionar novo evento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body container-fluid ">
+              <span id="msg-cad"></span>
+                <form method="POST" class="" id="addVisEvent">
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Título*" id="titulo" required>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                    </div>
+                    <textarea type="text" class="form-control" placeholder="Descrição" row="1" id="descricao"></textarea>
+                  </div>
+                  <div class="row col-12">
+                    <div class="input-group mb-3 col-6 col-sm-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" title="Cor do evento"><i class="fas fa-palette"></i></span>
+                      </div>
+                      <div class="color-pickers" title="Cor do evento" id="bgcolor"></div>
+                          
+                    </div>
+                    <div class="input-group mb-3 col-6 col-sm-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" title="Cor do texto"><i class="fas fa-paint-brush"></i></span>
+                      </div>
+                      <div class="color-pickers" title="Cor do texto" id="textcolor"></div> 
+                          
+                    </div>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Tipo de evento"><i class="far fa-calendar-check"></i></span>
+                    </div>
+                    <select class="custom-select col-10 col-sm-7" id="tipo" title="Tipo de evento">
+                      <option value="1" selected>Meu calendário</option>
+                      <option>CGP - Edgard</option>
+                      <option>LPO - Erick</option>
+                      <option>MPAT - Elisa</option>
+                    </select>
+                  </div>
+                  <div class='col-md-8'>
+                    <div class="form-group">
+                      <div class="input-group date" data-target-input="nearest">
+                        <input type="text" id="datahoraComeca" class="form-control" data-target="#datahoraComeca" placeholder="Data e horário de Início*" required onkeypress="DataHora(event, this)" />
+                        <div class="input-group-append" >
+                          <div class="input-group-text"><i class="fas fa-calendar-plus"></i></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='col-md-8'>
+                    <div class="form-group mb-0">
+                      <div class="input-group date" data-target-input="nearest">
+                        <input type="text" class="form-control" id="datahoraTermina" data-target="#datahoraTermina" placeholder="Data e horário de Término*" onkeypress="DataHora(event, this)" required/>
+                        <div class="input-group-append" >
+                          <div class="input-group-text"><i class="fas fa-calendar-minus"></i></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <span class="text-secondary"><small>OBS: formato DD/MM/AAAA HH:MM:SS</small></span>
+                  </div>
+                  <div class="float-right mb-3">
+                    <button type="button" class="btn btn-secondary btnToggleAddEvento" onclick="limparForm('addVisEvent')">Cancelar</button>
+                    <button type="button" class="btn btn-success" name="CadEvent" id="CadEvent" value="CadEvent" onclick="limparForm('addVisEvent')">Cadastrar</button>
+                  </div>
+                </form>
+            </div>
+          </div>
+
+          <div class="visFalta">
+            <div>
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Faltas de [Nome da materia]</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body container-fluid pb-5">
+                <span id="msg-addfalta"></span>
+                <form method="POST" class="" id="addMateriaFalta">
+                  <div class='col-md-10 col-12'>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Data da falta:</span>
+                        </div>
+                        <input type="date" id="faltaData" class="form-control" name="faltaData" required/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Horário da aula">Horário</span>
+                    </div>
+                    <select class="custom-select col-10 col-sm-7" id="faltaHorario" title="Horário de aula">
+                      <option value="1" selected>1 horário</option>
+                      <option>2 horário</option>
+                    </select>
+                  </div>
+                  <div class="float-right">
+                    <button type="button" class="btn btn-success" name="CadFalta" id="CadFalta" value="CadFalta" onclick="limparForm('addMateriaFalta')">Cadastrar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <div class="modal-body">
+              <div>
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th>Data da falta</th>
+                      <th>Horário</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>24/05/20 </td>
+                      <td>1 horário</td>
+                      <td><button type="button" class="btn btn-danger" id="dataFaltaExluir">Excluir</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-visualizar-faltas" onclick="limparForm('addMateriaFalta')">Voltar</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="visNota">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Notas de [Nome da materia]</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+              <!-- Modal body -->
+              <div class="modal-body container-fluid pb-5">
+                <span id="msg-addfalta"></span>
+                <form method="POST" class="" id="addMateriaNota">
+                  <div class='col-md-10 col-12'>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Data da Nota:</span>
+                        </div>
+                        <input type="date" id="notaData" class="form-control" name="notaData"/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-10">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Tipo de nota:</span>
+                    </div>
+                    <select class="custom-select col-10 col-sm-7" id="tipo" title="Tipo">
+                      <option selected>Prova 1</option>
+                      <option>Prova 2</option>
+                      <option>Prova 3</option>
+                      <option>Trabalho 1</option>
+                      <option>Trabalho 2</option>
+                      <option>Trabalho 3</option>
+                      <option>Sub 1</option>
+                    </select>
+                  </div>
+                  <div class="input-group mb-3 col-12 col-sm-6" id="divVisNota">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" title="Nota da matéria">Nota</span>
+                    </div>
+                    <input type="number" class="form-control" id="Nota">
+                  </div>
+                  <div class="float-right">
+                    <button type="button" class="btn btn-success" name="CadNota" id="CadNota" value="CadNota" onclick="limparForm('addMateriaNota')">Cadastrar</button>
+                  </div>
+                </form>
+              </div>
+
+              <hr>
+              <div class="modal-body">
+                <div>
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th>Tipo</th>
+                        <th>Nota</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Prova 1 </td>
+                        <td>6.0 </td>
+                        <td><button type="button" class="btn btn-danger" id="dataFaltaExluir">Excluir</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-visualizar-notas" onclick="limparForm('addMateriaNota')">Voltar</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Bootstrap 4 js -->
+<!-- ja tem no moment <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src='js/bootstrap/bootstrap.min.js'></script>
+  
+
+</body>
+</html>

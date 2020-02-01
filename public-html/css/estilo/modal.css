@@ -1,0 +1,52 @@
+.card-margin-top{
+    margin-top: 10px;
+}
+
+.btn-datetime:hover{
+    background-color: #cacacaab;
+}
+
+#url, #notas{
+    border:  0 ;
+}
+
+#url{
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-radius: 0;
+}
+
+.visEvent{
+    display: block;
+}
+
+.formEdit{
+    display: none;
+}
+
+.visMaterias{
+    display: block;
+}
+
+.matFalta{
+    display: none;
+}
+
+.matNota{
+    display: none;
+}
+
+.matInfo{
+    display: none;
+}
+
+.visFalta{
+    display: none;
+}
+
+.visNota{
+    display: none;
+}
+
+.ModalVisEventAdd{
+    display: none;
+}
